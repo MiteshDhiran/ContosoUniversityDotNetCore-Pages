@@ -7,32 +7,73 @@ using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using ContosoUniversity.Data;
 using ContosoUniversity.Models;
+using ContosoUniversity.Requests;
 using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
+using RequestDecorator;
+using RequestDecorator.Functional;
 
 namespace ContosoUniversity.Pages.Instructors
 {
     public class Details : PageModel
     {
         private readonly IMediator _mediator;
+        private readonly SchoolContext _db;
+        private readonly IConfigurationProvider _configuration;
+        private readonly APIContext<ContosoContext> _apiContext;
 
-        public Details(IMediator mediator) => _mediator = mediator;
+        public Details(IMediator mediator, SchoolContext db, IConfigurationProvider configuration, APIContext<ContosoContext> apiContext)
+        {
+            _mediator = mediator;
+            _db = db;
+            _configuration = configuration;
+            _apiContext = apiContext;
+        }
 
         public Model Data { get; private set; }
+        //new ContosoAPIContext(new ContosoContext(_db, _configuration))
+        /*
+        public async Task OnGetAsync(Query query) =>
+            Data = await Task.FromResult(query.Process(_apiContext)
+                .Result.TryGetResult(out var m)
+                ? m
+                : null);
+                */
+        //await Task.FromResult((Model)null) ; //await _mediator.Send(query);
 
-        public async Task OnGetAsync(Query query) => Data = await _mediator.Send(query);
+        public async Task OnGetAsync(Query query) =>  Data = await Task.FromResult(query.GetInstructorByIDRequest().Process(_apiContext).Result
+            .Select((s) => s, (ex) => null));
 
-        public record Query : IRequest<Model>
+        public class Query //: QueryRequest<int?, Details.Model, ContosoContext>
         {
-            public int? Id { get; init; }
+            public int? Id { get; set; }
+
+            public GetInstructorByIDRequest GetInstructorByIDRequest()
+            {
+                return new GetInstructorByIDRequest(this.Id);
+            }
+            
         }
+
+        /*
+        public class Query //: IRequest<Model>
+        {
+            public Query()
+            {
+                
+            }
+            //public int? Id { get; init; }
+            public int? Id { get; set; }
+        }
+        */
 
         public class Validator : AbstractValidator<Query>
         {
             public Validator()
             {
+                //RuleFor(m => m.Id).GreaterThan(100);
                 RuleFor(m => m.Id).NotNull();
             }
         }
@@ -56,7 +97,7 @@ namespace ContosoUniversity.Pages.Instructors
         {
             public MappingProfile() => CreateMap<Instructor, Model>();
         }
-
+        /*
         public class Handler : IRequestHandler<Query, Model>
         {
             private readonly SchoolContext _db;
@@ -74,5 +115,6 @@ namespace ContosoUniversity.Pages.Instructors
                 .ProjectTo<Model>(_configuration)
                 .SingleOrDefaultAsync(token);
         }
+        */
     }
 }

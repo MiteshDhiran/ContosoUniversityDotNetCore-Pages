@@ -3,6 +3,7 @@ using ContosoUniversity.Data;
 using ContosoUniversity.Infrastructure;
 using ContosoUniversity.Infrastructure.Tags;
 using ContosoUniversity.Pages.Instructors;
+using ContosoUniversity.Requests;
 using FluentValidation.AspNetCore;
 using HtmlTags;
 using MediatR;
@@ -12,6 +13,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using RequestDecorator;
+using IConfigurationProvider = AutoMapper.IConfigurationProvider;
 
 namespace ContosoUniversity
 {
@@ -53,6 +56,9 @@ namespace ContosoUniversity
                 .AddFluentValidation(cfg => { cfg.RegisterValidatorsFromAssemblyContaining<Startup>(); });
 
             services.AddMvc(opt => opt.ModelBinderProviders.Insert(0, new EntityModelBinderProvider()));
+            services.AddTransient<APIContext<ContosoContext>>((s) =>
+                new APIContext<ContosoContext>(new ContosoContext(s.GetService<SchoolContext>(),
+                    s.GetService<IConfigurationProvider>())));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
