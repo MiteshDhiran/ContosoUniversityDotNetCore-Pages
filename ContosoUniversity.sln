@@ -28,7 +28,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{
 		.github\workflows\main.yaml = .github\workflows\main.yaml
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RequestDecorator", "RequestDecorator\RequestDecorator.csproj", "{AA2F8234-C354-418B-9CDA-647F492925D8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RequestDecorator", "RequestDecorator\RequestDecorator.csproj", "{AA2F8234-C354-418B-9CDA-647F492925D8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommandDecoratorExtension", "CommandDecoratorExtension\CommandDecoratorExtension.csproj", "{105B8AAC-FD7E-44FC-BF74-CFD3BAB7FA2A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -48,6 +50,10 @@ Global
 		{AA2F8234-C354-418B-9CDA-647F492925D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AA2F8234-C354-418B-9CDA-647F492925D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AA2F8234-C354-418B-9CDA-647F492925D8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{105B8AAC-FD7E-44FC-BF74-CFD3BAB7FA2A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{105B8AAC-FD7E-44FC-BF74-CFD3BAB7FA2A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{105B8AAC-FD7E-44FC-BF74-CFD3BAB7FA2A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{105B8AAC-FD7E-44FC-BF74-CFD3BAB7FA2A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
