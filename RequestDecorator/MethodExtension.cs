@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Runtime.Serialization.Json;
 using System.Text;
 using RequestDecorator.Functional;
 
@@ -40,6 +42,56 @@ namespace RequestDecorator
                     throw;
                 }
             };
+        }
+
+        public static Func<T,Result<TO>> TryExecuteFunc<T,TO>(Func<T, TO> func)
+        {
+            return (T input) =>
+            {
+                try
+                {
+                    var res = func(input);
+                    return new Result<TO>(res);
+                }
+                catch (Exception e)
+                {
+                    return new Result<TO>(e);
+                }
+            };
+        }
+
+        public static string TrySerialize(object objectToSerialize, Func<object, Result<string>> trySerializeFunc)
+        {
+            if (objectToSerialize == null)
+            {
+                return "NULL";
+            }
+            else
+            {
+                 return trySerializeFunc(objectToSerialize).Select((data) => data
+                     , (ex) => $"Error Occurred While Serializing object of type: {objectToSerialize.GetType().FullName}");
+            }
+        }
+
+    }
+
+    public static class SerializeDeserializeHelper
+    {
+        public static string GetJSONSerializedObject(object value)
+        {
+            if (value != null)
+            {
+                var serializer = new DataContractJsonSerializer(value.GetType());
+                using var ms = new MemoryStream();
+                serializer.WriteObject(ms, value);
+                ms.Flush();
+                ms.Position = 0;
+                return Encoding.UTF8.GetString(ms.GetBuffer());
+            }
+            else
+            {
+                return string.Empty;
+            }
         }
     }
 }

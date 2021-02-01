@@ -1,4 +1,6 @@
-﻿using AutoMapper;
+﻿using System;
+using System.Threading.Channels;
+using AutoMapper;
 using ContosoUniversity.Data;
 using ContosoUniversity.Infrastructure;
 using ContosoUniversity.Infrastructure.Tags;
@@ -13,6 +15,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Newtonsoft.Json;
 using RequestDecorator;
 using IConfigurationProvider = AutoMapper.IConfigurationProvider;
 
@@ -57,8 +60,11 @@ namespace ContosoUniversity
 
             services.AddMvc(opt => opt.ModelBinderProviders.Insert(0, new EntityModelBinderProvider()));
             services.AddTransient<APIContext<ContosoContext>>((s) =>
-                new APIContext<ContosoContext>(new ContosoContext(s.GetService<SchoolContext>(),
-                    s.GetService<IConfigurationProvider>())));
+                new APIContext<ContosoContext>(
+                    new ContosoContext(s.GetService<SchoolContext>(),s.GetService<IConfigurationProvider>())
+                    ,SerializeDeserializeHelper.GetJSONSerializedObject
+                    ,(lg) => Console.WriteLine(lg.ToString())
+                    , (lgg) => Console.WriteLine(lgg.ToString())));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

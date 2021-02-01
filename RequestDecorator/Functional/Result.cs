@@ -70,5 +70,12 @@ namespace RequestDecorator
                 throw this.Exception;
             }
         }
+
+        public Result<T> FlattenResult(Result<Result<T>> result)
+        {
+            Result<T> retVal = result.Select((Result<T>  r) => r.Select<Result<T>>(rr => new Result<T>(rr)
+                ,(exx) => new Result<T>(exx))  , (ex) => new Result<T>(ex));
+            return retVal;
+        }
     }
 }
