@@ -58,5 +58,17 @@ namespace RequestDecorator
         {
             return Exception == null ? onSuccessFunc(Data) : onExceptionFunc(this.Exception);
         }
+
+        public T GetValueThrowExceptionIfExceptionPresent()
+        {
+            if (Exception == null)
+            {
+                return Data;
+            }
+            else
+            {
+                throw this.Exception;
+            }
+        }
     }
 }

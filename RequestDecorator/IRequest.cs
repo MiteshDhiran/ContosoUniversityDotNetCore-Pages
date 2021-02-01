@@ -9,5 +9,7 @@ namespace RequestDecorator
     {
         TI Data { get; }
         Func<IRequestContext<TI, TR, TC>, Task<Result<TR>>> ProcessRequestFunc { get; }
+
+        //Task<Result<TR>> Process(IAPIContext<TC> context);
     }
 }

@@ -43,31 +43,18 @@ namespace ContosoUniversity.Pages.Instructors
                 */
         //await Task.FromResult((Model)null) ; //await _mediator.Send(query);
 
-        public async Task OnGetAsync(Query query) =>  Data = await Task.FromResult(query.GetInstructorByIDRequest().Process(_apiContext).Result
-            .Select((s) => s, (ex) => null));
-
-        public class Query //: QueryRequest<int?, Details.Model, ContosoContext>
-        {
-            public int? Id { get; set; }
-
-            public GetInstructorByIDRequest GetInstructorByIDRequest()
-            {
-                return new GetInstructorByIDRequest(this.Id);
-            }
+        public async Task OnGetAsync(Query query) => Data = await RequestProcessor.ProcessRequest(query, _apiContext);
             
+
+        public class Query : IRequest<int?, Model, ContosoContext>
+        {
+            public int? Id { get; set; }
+            public int? Data => Id;
+            public Func<IRequestContext<int?, Model, ContosoContext>, Task<Result<Model>>> ProcessRequestFunc => GetInstructorByIDRequest.ProcessFunc;
         }
 
-        /*
-        public class Query //: IRequest<Model>
-        {
-            public Query()
-            {
-                
-            }
-            //public int? Id { get; init; }
-            public int? Id { get; set; }
-        }
-        */
+        
+
 
         public class Validator : AbstractValidator<Query>
         {
