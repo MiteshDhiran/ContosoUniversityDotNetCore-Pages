@@ -44,6 +44,7 @@ namespace RequestDecorator
             };
         }
 
+        /*
         public static Func<IRequestContext<TI, TR,TC>, Task<Result<TR>>> DecorateWithExecutionTimeLogger<TI, TR,TC>(
             this Func<IRequestContext<TI, TR,TC>, Task<Result<TR>>> funcToBeDecorated,
             Func<IRequestContext<TI, TR,TC>, bool> condition)
@@ -52,6 +53,7 @@ namespace RequestDecorator
                 ? funcToBeDecorated.DecorateWithExecutionTimeLogger()(inputWithContext) 
                 : funcToBeDecorated(inputWithContext);
         }
+        */
 
         public static Func<IRequestContext<TI, TR,TC>, Task<Result<TR>>> DecorateWithExecutionTimeLogger<TI, TR,TC>(this Func<IRequestContext<TI, TR,TC>, Task<Result<TR>>> funcToBeDecorated) =>
             funcToBeDecorated.PipeLineDecorateFunc<Stopwatch, IRequestContext<TI, TR,TC>, Task<Result<TR>>>(
@@ -100,6 +102,7 @@ namespace RequestDecorator
                 );
 
 
+        /*
         public static Func<IRequestContext<TI, TR,TC>, Task<Result<TR>>> DecorateQueryWithValidationOld<TI, TR,TC>(
             this Func<IRequestContext<TI, TR,TC>, Task<Result<TR>>> funcToBeDecoratedWithValidation, Func<IRequestContext<TI, TR, TC>, MayBe<ValidationMessage<TI>>> validationFunc)
         {
@@ -117,6 +120,6 @@ namespace RequestDecorator
                 }
             };
         }
-        
+        */
     }
 }
