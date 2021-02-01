@@ -21,4 +21,24 @@ namespace RequestDecorator
             return RequestInfo.ProcessRequestFunc(this);
         }
     }
+
+    public class RequestWithValidationContext<TI, TR, TC> : IRequestWithValidationContext<TI,TR,TC>, IRequestContext<TI, TR, TC>
+    {
+        public IAPIContext<TC> Context { get; }
+        IRequest<TI, TR, TC> IRequestContext<TI, TR, TC>.RequestInfo => RequestInfo;
+
+        public IRequestWithValidation<TI, TR, TC> RequestInfo { get; }
+
+        public RequestWithValidationContext(IAPIContext<TC> context, IRequestWithValidation<TI, TR, TC> requestInfo)
+        {
+            Context = context;
+            RequestInfo = requestInfo;
+        }
+
+        public Task<Result<TR>> ProcessRequest()
+        {
+            return RequestInfo.ProcessRequestFunc(this);
+        }
+    }
+
 }

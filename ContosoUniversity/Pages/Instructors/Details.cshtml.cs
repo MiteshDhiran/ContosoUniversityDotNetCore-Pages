@@ -20,15 +20,11 @@ namespace ContosoUniversity.Pages.Instructors
     public class Details : PageModel
     {
         private readonly IMediator _mediator;
-        private readonly SchoolContext _db;
-        private readonly IConfigurationProvider _configuration;
         private readonly APIContext<ContosoContext> _apiContext;
 
         public Details(IMediator mediator, SchoolContext db, IConfigurationProvider configuration, APIContext<ContosoContext> apiContext)
         {
             _mediator = mediator;
-            _db = db;
-            _configuration = configuration;
             _apiContext = apiContext;
         }
 
@@ -43,14 +39,17 @@ namespace ContosoUniversity.Pages.Instructors
                 */
         //await Task.FromResult((Model)null) ; //await _mediator.Send(query);
 
-        public async Task OnGetAsync(Query query) => Data = await RequestProcessor.ProcessRequest(query, _apiContext);
+        public async Task OnGetAsync(Query query) => Data = await query.ProcessRequest(_apiContext);
             
 
-        public class Query : IRequest<int?, Model, ContosoContext>
+        public class Query : IRequestWithValidation<int?, Model, ContosoContext>
         {
             public int? Id { get; set; }
             public int? Data => Id;
             public Func<IRequestContext<int?, Model, ContosoContext>, Task<Result<Model>>> ProcessRequestFunc => GetInstructorByIDRequest.ProcessFunc;
+
+            public Func<IRequestContext<int?, Model, ContosoContext>, MayBe<ValidationMessage<int?>>> 
+                ValidationFunc => ((req) => MayBeExtension.GetNothingMaybe<RequestDecorator.ValidationMessage<int?>>());
         }
 
         
