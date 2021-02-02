@@ -8,7 +8,7 @@ namespace RequestDecorator
 {
     public static class DefaultRequestProcessor
     {
-        public static async Task<TR> ProcessRequest<TI, TR, TC>(this IRequest<TI, TR, TC> request, IAPIContext<TC> apiContext)
+        public static async Task<TR> GenericProcessRequest<TI, TR, TC>(this IRequest<TI, TR, TC> request, IAPIContext<TC> apiContext)
         {
             var requestWithContext = new RequestWithContext<TI, TR, TC>(apiContext, request);
             var res = await requestWithContext.RequestInfo.ProcessRequestFunc(requestWithContext);
@@ -16,7 +16,7 @@ namespace RequestDecorator
             return retVal;
         }
 
-        public static async Task<TR> ProcessRequest<TI, TR, TC>(this IRequestWithValidation<TI, TR, TC> request, IAPIContext<TC> apiContext)
+        public static async Task<TR> GenericProcessRequest<TI, TR, TC>(this IRequestWithValidation<TI, TR, TC> request, IAPIContext<TC> apiContext)
         {
             var requestWithContext = new RequestWithValidationContext<TI,TR,TC>(apiContext, request);
             var decoratedFunc = DecoratedFunc(requestWithContext);

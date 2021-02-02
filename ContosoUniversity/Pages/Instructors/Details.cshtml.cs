@@ -31,7 +31,7 @@ namespace ContosoUniversity.Pages.Instructors
 
         public Model Data { get; private set; }
 
-        public async Task OnGetAsync(Query query) => Data = await query.Process(_apiContext);
+        public async Task OnGetAsync(Query query) => Data = await query.ProcessRequest(_apiContext);
 
         public class Query : IRequestWithFluentValidator<int?, Model, ContosoContext> 
         {
