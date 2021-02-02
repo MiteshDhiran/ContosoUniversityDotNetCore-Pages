@@ -6,6 +6,7 @@ using RequestDecorator.Functional;
 
 namespace RequestDecorator
 {
+    /*
     public static class QueryRequestExtension
     {
         public static QueryRequest<TI, TR, TC> GetQueryRequest<TI, TR, TC>(IRequestWithoutContextType<TI, TR> requestWithoutContextType
@@ -22,4 +23,5 @@ namespace RequestDecorator
             return new QueryRequest<TI, TR, TC>(new RequestWithoutContextType<TI, TR>(data), validateFunc, processFunc);
         }
     }
+    */
 }

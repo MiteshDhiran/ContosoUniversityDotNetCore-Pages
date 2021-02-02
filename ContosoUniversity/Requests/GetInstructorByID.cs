@@ -10,25 +10,7 @@ using RequestDecorator.Functional;
 
 namespace ContosoUniversity.Requests
 {
-    public class GetInstructorByIDRequestInfo : IRequestWithoutContextType<int?, Details.Model>
-    {
-        public GetInstructorByIDRequestInfo(int? data)
-        {
-            Data = data;
-        }
-
-        public int? Data { get; }
-
-        public QueryRequest<int?, Details.Model, ContosoContext> GetQueryRequestWithContextType()
-        {
-            //return new GetInstructorByIDRequest(this);
-            return new QueryRequest<int?, Details.Model, ContosoContext>(this,
-                GetInstructorByIDRequest.InstructorValidationFunc, GetInstructorByIDRequest.ProcessFunc);
-        }
-    }
-    
-    
-    public class GetInstructorByIDRequest : QueryRequest<int?, Details.Model, ContosoContext>
+    public static class GetInstructorByIDRequest 
     {
         public static readonly Func<IRequestContext<int?, Details.Model, ContosoContext>, MayBe<RequestDecorator.ValidationMessage<int?>>>
             InstructorValidationFunc = ((req) => MayBeExtension.GetNothingMaybe<RequestDecorator.ValidationMessage<int?>>());
@@ -58,17 +40,7 @@ namespace ContosoUniversity.Requests
                     }
                 };
         
-        public GetInstructorByIDRequest(int? instructorID)
-            : base(new RequestWithoutContextType<int?, Details.Model>(instructorID), InstructorValidationFunc, ProcessFunc)
-        {
-
-        }
         
-        public GetInstructorByIDRequest(IRequestWithoutContextType<int?, Details.Model> queryRequestWithoutContextType)
-            : base(queryRequestWithoutContextType, InstructorValidationFunc, ProcessFunc)
-        {
-
-        }
     }
 
     

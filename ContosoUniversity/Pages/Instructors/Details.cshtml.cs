@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using CommandDecoratorExtension;
 using ContosoUniversity.Data;
 using ContosoUniversity.Models;
 using ContosoUniversity.Requests;
@@ -14,6 +15,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using RequestDecorator;
 using RequestDecorator.Functional;
+using ValidationException = FluentValidation.ValidationException;
 
 namespace ContosoUniversity.Pages.Instructors
 {
@@ -39,19 +41,43 @@ namespace ContosoUniversity.Pages.Instructors
                 */
         //await Task.FromResult((Model)null) ; //await _mediator.Send(query);
 
-        public async Task OnGetAsync(Query query) => Data = await query.ProcessRequest(_apiContext);
-            
+        //public async Task OnGetAsync(Query query) => Data = await query.ProcessRequest(_apiContext);
+        public async Task OnGetAsync(Query query) => Data = await query.Process(_apiContext);
 
-        public class Query : IRequestWithValidation<int?, Model, ContosoContext>
+
+        public class Query : IRequestWithFluentValidator<int?, Model, ContosoContext> 
         {
             public int? Id { get; set; }
             public int? Data => Id;
-            public Func<IRequestContext<int?, Model, ContosoContext>, Task<Result<Model>>> ProcessRequestFunc => GetInstructorByIDRequest.ProcessFunc;
+            public Func<IRequestContext<int?, Model, ContosoContext>, Task<Result<Model>>> ProcessRequestFunc 
+                => GetInstructorByIDRequest.ProcessFunc;
+            public Func<IRequestContext<int?, Model, ContosoContext>, MayBe<ValidationException>> ValidationFunc
+                => (reqContext) =>
+                {
+                    QueryValidator validator = new QueryValidator();
+                    var validationResult = validator.Validate(this);
+                    if (validationResult.IsValid)
+                    {
+                        return new MayBe<ValidationException>(MayBeDataState.DataNotPresent);
+                    }
+                    else
+                    {
+                        var validationException = new ValidationException(validationResult.Errors);
+                        return new MayBe<FluentValidation.ValidationException>(validationException);
+                    }
+                };
 
-            public Func<IRequestContext<int?, Model, ContosoContext>, MayBe<ValidationMessage<int?>>> 
-                ValidationFunc => ((req) => MayBeExtension.GetNothingMaybe<RequestDecorator.ValidationMessage<int?>>());
+            public Task<Model> Process(IAPIContext<ContosoContext> context) => 
+                ((IRequestWithFluentValidator<int?, Model, ContosoContext>)this).InterfaceProcess(context);
 
-
+            internal class QueryValidator : AbstractValidator<Query>
+            {
+                public QueryValidator()
+                {
+                    RuleFor(m => m.Id).NotNull();
+                }
+            }
+            
         }
 
         

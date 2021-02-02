@@ -8,6 +8,13 @@ namespace CommandDecoratorExtension
 {
     public interface IRequestWithFluentValidator<TI, TR, TC> : IRequest<TI, TR, TC>
     {
+        new Func<Func<IRequestContext<TI, TR, TC>, Task<Result<TR>>>, Func<IRequestContext<TI, TR, TC>, Task<Result<TR>>>>
+            FunctionDecorator => (Func<IRequestContext<TI, TR, TC>, Task<Result<TR>>> inputFunc) => 
+                inputFunc.DecorateRequestWithFluentValidation(ValidationFunc).DecorateWithExecutionTimeLogger();
+
+        new Task<TR> InterfaceProcess(IAPIContext<TC> context) => Task.FromResult(FunctionDecorator(ProcessRequestFunc)(new RequestContext<TI, TR, TC>(context, this)).Result
+            .GetValueThrowExceptionIfExceptionPresent());
+
         Func<IRequestContext<TI, TR, TC>, MayBe<FluentValidation.ValidationException>> ValidationFunc { get; }
     }
 
@@ -28,5 +35,7 @@ namespace CommandDecoratorExtension
                             : MayBeExtension.GetNothingMaybe<Task<Result<TR>>>();
                     }
                     ,(sw, input, previousResultValue) => previousResultValue.GetValueThrowExceptionIfExceptionPresent());
+
+        
     }
 }
