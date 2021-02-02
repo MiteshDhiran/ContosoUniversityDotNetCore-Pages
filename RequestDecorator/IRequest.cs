@@ -18,6 +18,7 @@ namespace RequestDecorator
             .GetValueThrowExceptionIfExceptionPresent());
 
         Task<TR>  Process(IAPIContext<TC> context);
+        
     }
 
     public interface  IRequestWithValidation<TI, TR, TC> : IRequest<TI, TR, TC>

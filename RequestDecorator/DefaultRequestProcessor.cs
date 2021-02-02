@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace RequestDecorator
 {
-    public static class RequestProcessor
+    public static class DefaultRequestProcessor
     {
         public static async Task<TR> ProcessRequest<TI, TR, TC>(this IRequest<TI, TR, TC> request, IAPIContext<TC> apiContext)
         {
@@ -25,7 +25,6 @@ namespace RequestDecorator
             return retVal;
         }
 
-        //public static Func<IRequestContext<TI, TR, TC>, Func<IRequestContext<TI, TR, TC>, Task<Result<TR>>>> GetDocratorFuncBasedOnType
 
         private static Func<IRequestContext<TI, TR, TC>, Task<Result<TR>>> DecoratedFunc<TI, TR, TC>(IRequestContext<TI, TR, TC> requestWithContext)
         {

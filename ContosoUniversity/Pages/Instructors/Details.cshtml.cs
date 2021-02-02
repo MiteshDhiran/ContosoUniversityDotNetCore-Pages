@@ -12,7 +12,6 @@ using ContosoUniversity.Requests;
 using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
 using RequestDecorator;
 using RequestDecorator.Functional;
 using ValidationException = FluentValidation.ValidationException;
@@ -38,8 +37,10 @@ namespace ContosoUniversity.Pages.Instructors
         {
             public int? Id { get; set; }
             public int? Data => Id;
+            
             public Func<IRequestContext<int?, Model, ContosoContext>, Task<Result<Model>>> ProcessRequestFunc 
                 => GetInstructorByIDRequest.ProcessFunc;
+
             public Func<IRequestContext<int?, Model, ContosoContext>, MayBe<ValidationException>> ValidationFunc
                 => (reqContext) =>
                 {
@@ -51,8 +52,7 @@ namespace ContosoUniversity.Pages.Instructors
                     
                 };
 
-            public Task<Model> Process(IAPIContext<ContosoContext> context) => 
-                ((IRequestWithFluentValidator<int?, Model, ContosoContext>)this).InterfaceProcess(context);
+            public Task<Model> Process(IAPIContext<ContosoContext> context) => this.ProcessRequest(context);
 
             class QueryValidator : AbstractValidator<Query>
             {
