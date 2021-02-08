@@ -14,15 +14,13 @@ namespace RequestDecorator
         TI Data { get; }
         Func<IRequestContext<TI, TR, TC>, Task<Result<TR>>> ProcessRequestFunc { get; }
 
-        Task<TR> InterfaceProcess(IAPIContext<TC> context) => Task.FromResult(ProcessRequestFunc(new RequestContext<TI, TR, TC>(context,this)).Result
-            .GetValueThrowExceptionIfExceptionPresent());
+        //Task<TR> InterfaceProcess(IAPIContext<TC> context)
+        //    => Task.FromResult(ProcessRequestFunc(new RequestContext<TI, TR, TC>(context, this)).Result.GetValueThrowExceptionIfExceptionPresent());
+            
 
         Task<TR>  Process(IAPIContext<TC> context);
         
     }
 
-    public interface  IRequestWithValidation<TI, TR, TC> : IRequest<TI, TR, TC>
-    {
-        Func<IRequestContext<TI, TR, TC>, MayBe<ValidationMessage<TI>>> ValidationFunc { get; }
-    }
+    
 }

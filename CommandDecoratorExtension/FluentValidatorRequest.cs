@@ -11,8 +11,8 @@ namespace CommandDecoratorExtension
             FunctionDecorator => (Func<IRequestContext<TI, TR, TC>, Task<Result<TR>>> inputFunc) => 
                 inputFunc.DecorateRequestWithFluentValidation(ValidationFunc);
 
-        new Task<TR> InterfaceProcess(IAPIContext<TC> context) => Task.FromResult(FunctionDecorator(ProcessRequestFunc)(new RequestContext<TI, TR, TC>(context, this)).Result
-            .GetValueThrowExceptionIfExceptionPresent());
+        //new Task<TR> InterfaceProcess(IAPIContext<TC> context) => Task.FromResult(FunctionDecorator(ProcessRequestFunc)(new RequestContext<TI, TR, TC>(context, this)).Result
+        //    .GetValueThrowExceptionIfExceptionPresent());
 
         Func<IRequestContext<TI, TR, TC>, MayBe<FluentValidation.ValidationException>> ValidationFunc { get; }
     }

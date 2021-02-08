@@ -9,10 +9,5 @@ namespace RequestDecorator
         IAPIContext<TC> Context { get; }
         IRequest<TI, TR, TC> RequestInfo { get; }
     }
-
-    public interface IRequestWithValidationContext<TI, TR, TC>
-    {
-        IAPIContext<TC> Context { get; }
-        IRequestWithValidation<TI, TR, TC> RequestInfo { get; }
-    }
+    
 }

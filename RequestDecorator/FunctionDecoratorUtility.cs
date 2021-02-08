@@ -8,6 +8,7 @@ namespace RequestDecorator
 {
     public static class FunctionDecoratorUtility
     {
+        /*
         public static Func<IRequestContext<TI, TR, TC>, Task<Result<TR>>> DecorateAPIBehavior<TI, TR,TC>(
             this Func<IRequestContext<TI, TR, TC>, Task<Result<TR>>> apiFuncToBeDecorated)
         {
@@ -16,7 +17,9 @@ namespace RequestDecorator
                 //.DecorateWithExecutionTimeLogger((input) => input.Context.FrameworkContext.APITrackingInfo.IsAPITrackingPerformanceEnabled)
                 //.DecorateWithAPIInputOutputLogger((input) => input.Context.FrameworkContext.APITrackingInfo.IsAPITrackingInputEnabled || input.Context.FrameworkContext.APITrackingInfo.IsAPITrackingOutputEnabled || input.Context.FrameworkContext.APITrackingInfo.IsTrackingExceptionEnabled);
         }
+        */
 
+        /*
         public static Func<IRequestWithValidationContext<TI, TR, TC>, Task<Result<TR>>> DecorateAPIBehavior<TI, TR, TC>(
             this Func<IRequestWithValidationContext<TI, TR, TC>, Task<Result<TR>>> apiFuncToBeDecorated)
         {
@@ -41,6 +44,7 @@ namespace RequestDecorator
                 }
             };
         }
+        */
 
         public static Func<IRequestContext<TI, TR,TC>, Task<Result<TR>>> DecorateWithExecutionTimeLogger<TI, TR,TC>(this Func<IRequestContext<TI, TR,TC>, Task<Result<TR>>> funcToBeDecorated) =>
             funcToBeDecorated.PipeLineDecorateFunc<Stopwatch, IRequestContext<TI, TR,TC>, Task<Result<TR>>>(
@@ -64,6 +68,7 @@ namespace RequestDecorator
                 });
 
 
+        /*
         public static Func<IRequestContext<TI, TR, TC>, Task<Result<TR>>> DecorateRequestWithValidation<TI, TR, TC>(
             this Func<IRequestContext<TI, TR, TC>, Task<Result<TR>>> funcToBeDecorated,
             Func<IRequestContext<TI, TR, TC>, MayBe<ValidationMessage<TI>>> validationFunc)
@@ -85,6 +90,8 @@ namespace RequestDecorator
                     }
                     , (sw, input, previousResultValue) => previousResultValue.GetValueThrowExceptionIfExceptionPresent()
                 );
+
+                */
 
         public static Func<IRequestContext<TI, TR, TC>, Task<Result<TR>>> DecorateRequestWithInputOutputLogging<TI, TR, TC>(
             this Func<IRequestContext<TI, TR, TC>, Task<Result<TR>>> funcToBeDecorated,

@@ -12,9 +12,7 @@ namespace ContosoUniversity.Requests
 {
     public static class GetInstructorByIDRequest 
     {
-        public static readonly Func<IRequestContext<int?, Details.Model, ContosoContext>, MayBe<RequestDecorator.ValidationMessage<int?>>>
-            InstructorValidationFunc = ((req) => MayBeExtension.GetNothingMaybe<RequestDecorator.ValidationMessage<int?>>());
-
+     
         public static readonly Func<IRequestContext<int?, Details.Model, ContosoContext>, Task<Result<Details.Model>>>
             ProcessFunc =
                 (req) =>
