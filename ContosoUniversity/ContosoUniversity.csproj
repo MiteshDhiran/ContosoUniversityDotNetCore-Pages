@@ -21,11 +21,7 @@
     </PackageReference>
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="5.0.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="5.0.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\CommandDecoratorExtension\CommandDecoratorExtension.csproj" />
-    <ProjectReference Include="..\RequestDecorator\RequestDecorator.csproj" />
+    <PackageReference Include="RequestDecorator.Extension" Version="1.0.0" />
   </ItemGroup>
 
 </Project>
