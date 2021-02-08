@@ -8,43 +8,7 @@ namespace RequestDecorator
 {
     public static class FunctionDecoratorUtility
     {
-        /*
-        public static Func<IRequestContext<TI, TR, TC>, Task<Result<TR>>> DecorateAPIBehavior<TI, TR,TC>(
-            this Func<IRequestContext<TI, TR, TC>, Task<Result<TR>>> apiFuncToBeDecorated)
-        {
-            return apiFuncToBeDecorated;
-                //.DecorateQueryWithValidation()
-                //.DecorateWithExecutionTimeLogger((input) => input.Context.FrameworkContext.APITrackingInfo.IsAPITrackingPerformanceEnabled)
-                //.DecorateWithAPIInputOutputLogger((input) => input.Context.FrameworkContext.APITrackingInfo.IsAPITrackingInputEnabled || input.Context.FrameworkContext.APITrackingInfo.IsAPITrackingOutputEnabled || input.Context.FrameworkContext.APITrackingInfo.IsTrackingExceptionEnabled);
-        }
-        */
-
-        /*
-        public static Func<IRequestWithValidationContext<TI, TR, TC>, Task<Result<TR>>> DecorateAPIBehavior<TI, TR, TC>(
-            this Func<IRequestWithValidationContext<TI, TR, TC>, Task<Result<TR>>> apiFuncToBeDecorated)
-        {
-            return apiFuncToBeDecorated;
-            //   .DecorateQueryWithValidation();
-            //.DecorateWithExecutionTimeLogger((input) => input.Context.FrameworkContext.APITrackingInfo.IsAPITrackingPerformanceEnabled)
-            //.DecorateWithAPIInputOutputLogger((input) => input.Context.FrameworkContext.APITrackingInfo.IsAPITrackingInputEnabled || input.Context.FrameworkContext.APITrackingInfo.IsAPITrackingOutputEnabled || input.Context.FrameworkContext.APITrackingInfo.IsTrackingExceptionEnabled);
-        }
-
-        public static Func<IRequestContext<TI, TR, TC>, Task<Result<TR>>> DecorateWithValidation<TI, TR, TC>(this IRequestWithValidationContext<TI, TR, TC> requestWithValidationContext)
-        {
-            return (IRequestContext<TI, TR, TC> inputWithContext) =>
-            {
-                var mayBeValidationMessage = requestWithValidationContext.RequestInfo.ValidationFunc(inputWithContext);
-                if (mayBeValidationMessage.TryGetValue(out var validationMessage))
-                {
-                    return Task.FromResult(new Result<TR>(ValidationException.GetValidationExceptionFromData<TI>(validationMessage)));
-                }
-                else
-                {
-                    return requestWithValidationContext.RequestInfo.ProcessRequestFunc(inputWithContext);
-                }
-            };
-        }
-        */
+        
 
         public static Func<IRequestContext<TI, TR,TC>, Task<Result<TR>>> DecorateWithExecutionTimeLogger<TI, TR,TC>(this Func<IRequestContext<TI, TR,TC>, Task<Result<TR>>> funcToBeDecorated) =>
             funcToBeDecorated.PipeLineDecorateFunc<Stopwatch, IRequestContext<TI, TR,TC>, Task<Result<TR>>>(
@@ -68,31 +32,7 @@ namespace RequestDecorator
                 });
 
 
-        /*
-        public static Func<IRequestContext<TI, TR, TC>, Task<Result<TR>>> DecorateRequestWithValidation<TI, TR, TC>(
-            this Func<IRequestContext<TI, TR, TC>, Task<Result<TR>>> funcToBeDecorated,
-            Func<IRequestContext<TI, TR, TC>, MayBe<ValidationMessage<TI>>> validationFunc)
-            =>
-                funcToBeDecorated.PipeLineDecorateFunc<int, IRequestContext<TI, TR, TC>, Task<Result<TR>>>(
-                    (input) => 0
-                    , (sw, input) =>
-                    {
-                        var mayBeValidationMessage = validationFunc(input);
-                        if (mayBeValidationMessage.TryGetValue(out var validationMessage))
-                        {
-                            return
-                                new MayBe<Task<Result<TR>>>(Task.FromResult(new Result<TR>(ValidationException.GetValidationExceptionFromData<TI>(validationMessage))));
-                        }
-                        else
-                        {
-                            return GetNothingMaybe<Task<Result<TR>>>();
-                        }
-                    }
-                    , (sw, input, previousResultValue) => previousResultValue.GetValueThrowExceptionIfExceptionPresent()
-                );
-
-                */
-
+        
         public static Func<IRequestContext<TI, TR, TC>, Task<Result<TR>>> DecorateRequestWithInputOutputLogging<TI, TR, TC>(
             this Func<IRequestContext<TI, TR, TC>, Task<Result<TR>>> funcToBeDecorated,
             Func<object,string> serializeFunc)
